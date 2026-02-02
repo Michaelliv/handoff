@@ -81,12 +81,15 @@ jobs:
           ref: main
 
       - name: Update formula and cask with new SHA256
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           VERSION=${GITHUB_REF_NAME#v}
 
-          # Download SHA files
-          CLI_SHA=$(curl -sL https://github.com/Michaelliv/handoff/releases/download/${GITHUB_REF_NAME}/handoff-${GITHUB_REF_NAME}-universal.tar.gz.sha256 | cut -d' ' -f1)
-          APP_SHA=$(curl -sL https://github.com/Michaelliv/handoff/releases/download/${GITHUB_REF_NAME}/SharedClipboard-${GITHUB_REF_NAME}.dmg.sha256 | cut -d' ' -f1)
+          # Download SHA files using gh CLI
+          gh release download ${GITHUB_REF_NAME} --pattern "*.sha256" --dir /tmp/sha
+          CLI_SHA=$(grep "handoff-" /tmp/sha/*.sha256 | cut -d' ' -f1)
+          APP_SHA=$(grep "SharedClipboard-" /tmp/sha/*.sha256 | cut -d' ' -f1)
 
           # Update Formula
           sed -i "s/sha256 \".*\"/sha256 \"${CLI_SHA}\"/" Formula/handoff.rb

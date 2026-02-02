@@ -1,6 +1,6 @@
 cask "handoff" do
   version "1.0.0"
-  sha256 "Not"
+  sha256 "d566043fd16dd02f26900fd03813900abdf8be7f7f616af4ccb083223a1a7a33"
 
   url "https://github.com/Michaelliv/handoff/releases/download/v#{version}/SharedClipboard-#{version}.dmg"
   name "Shared Clipboard"
