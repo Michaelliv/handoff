@@ -1,8 +1,8 @@
 # Placeholder for Homebrew formula
 # See issue #5 for implementation details
 
-class Clip < Formula
-  desc "CLI tool for managing shared clipboard content"
+class Handoff < Formula
+  desc "Shared clipboard CLI for humans and AI agents"
   homepage "https://github.com/michaelliv/handoff"
   # url and sha256 to be added when releasing
   license "MIT"
@@ -10,10 +10,10 @@ class Clip < Formula
   depends_on :macos
 
   def install
-    bin.install "clip"
+    bin.install "handoff"
   end
 
   test do
-    system "#{bin}/clip", "--help"
+    system "#{bin}/handoff", "--help"
   end
 end

@@ -13,8 +13,8 @@ let package = Package(
             targets: ["ClipboardCore"]
         ),
         .executable(
-            name: "clip",
-            targets: ["clip"]
+            name: "handoff",
+            targets: ["handoff"]
         ),
     ],
     dependencies: [
@@ -26,7 +26,7 @@ let package = Package(
             dependencies: []
         ),
         .executableTarget(
-            name: "clip",
+            name: "handoff",
             dependencies: [
                 "ClipboardCore",
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),

@@ -5,8 +5,8 @@ A macOS clipboard manager designed for sharing content between humans and AI age
 ## Components
 
 - **ClipboardCore**: Shared Swift library for storage and logic
-- **clip**: CLI tool for pushing/getting clipboard content
-- **Handoff**: macOS menu bar app for visual access
+- **handoff**: CLI tool for pushing/getting clipboard content
+- **Handoff.app**: macOS menu bar app for visual access
 
 ## Installation
 
@@ -14,7 +14,7 @@ A macOS clipboard manager designed for sharing content between humans and AI age
 
 ```bash
 # Install CLI tool
-brew install michaelliv/tap/clip
+brew install michaelliv/tap/handoff
 
 # Install menu bar app
 brew install --cask michaelliv/tap/handoff
@@ -26,20 +26,53 @@ brew install --cask michaelliv/tap/handoff
 git clone https://github.com/michaelliv/handoff.git
 cd handoff
 swift build -c release
+cp .build/release/handoff /usr/local/bin/
 ```
 
 ## CLI Usage
 
 ```bash
-# Push content to clipboard
-clip push "Hello, world!"
+# Push content to stack
+handoff push "Hello, world!"
 
-# Get current clipboard content
-clip get
+# Push from pipe
+echo "piped content" | handoff push
+cat file.txt | handoff push
 
-# List clipboard history
-clip list
+# Get item by position (1 = newest)
+handoff 1
+handoff 2
+
+# Pop (get and remove) newest item
+handoff pop
+
+# List stack items
+handoff list
+
+# Save #1 to named slot
+handoff save ticket
+
+# Get named slot
+handoff ticket
+
+# Delete named slot
+handoff delete ticket
+
+# List all named slots
+handoff slots
+
+# Clear the stack
+handoff clear
+
+# Help
+handoff --help
 ```
+
+## Storage
+
+Data is stored in `~/.handoff/`:
+- `stack.json` - clipboard stack (max 50 items)
+- `named/*.json` - named slots
 
 ## Related Issues
 
