@@ -77,6 +77,8 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main
 
       - name: Update formula and cask with new SHA256
         run: |
