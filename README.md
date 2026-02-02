@@ -29,43 +29,59 @@ swift build -c release
 cp .build/release/handoff /usr/local/bin/
 ```
 
+## Menu Bar App
+
+The menu bar app provides quick visual access to your clipboard stack:
+
+- **Auto-capture**: Automatically captures anything you copy with ⌘C
+- **Click to copy**: Click any item to copy it back to system clipboard
+- **Launch at Login**: Optional toggle to start with macOS
+- **Live sync**: Auto-refreshes when CLI modifies storage
+
 ## CLI Usage
 
 ```bash
 # Push content to stack
-handoff push "Hello, world!"
+handoff push "Hello, world!"    # or: handoff p "..."
 
 # Push from pipe
 echo "piped content" | handoff push
-cat file.txt | handoff push
+cat file.txt | handoff p
 
 # Get item by position (1 = newest)
 handoff 1
 handoff 2
 
 # Pop (get and remove) newest item
-handoff pop
+handoff pop                      # or: handoff o
 
 # List stack items
-handoff list
+handoff list                     # or: handoff l, handoff ls
 
 # Save #1 to named slot
-handoff save ticket
+handoff save ticket              # or: handoff s ticket
 
 # Get named slot
 handoff ticket
 
 # Delete named slot
-handoff delete ticket
+handoff delete ticket            # or: handoff d, handoff rm
 
 # List all named slots
-handoff slots
+handoff slots                    # or: handoff sl
 
 # Clear the stack
-handoff clear
+handoff clear                    # or: handoff c
+
+# Show version
+handoff version                  # or: handoff v
+
+# Add instructions to ~/.claude/CLAUDE.md (for AI agents)
+handoff onboard
+handoff onboard --force          # update existing instructions
 
 # Help
-handoff --help
+handoff help
 ```
 
 ## Storage
