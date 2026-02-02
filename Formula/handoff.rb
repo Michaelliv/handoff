@@ -1,13 +1,12 @@
-# Placeholder for Homebrew formula
-# See issue #5 for implementation details
-
 class Handoff < Formula
   desc "Shared clipboard CLI for humans and AI agents"
-  homepage "https://github.com/michaelliv/handoff"
-  # url and sha256 to be added when releasing
+  homepage "https://github.com/Michaelliv/shared-clipboard"
+  url "https://github.com/Michaelliv/shared-clipboard/releases/download/v#{version}/handoff-#{version}-universal.tar.gz"
+  sha256 "PLACEHOLDER_SHA256"
   license "MIT"
 
   depends_on :macos
+  depends_on macos: :ventura
 
   def install
     bin.install "handoff"

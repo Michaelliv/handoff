@@ -1,0 +1,102 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-cli:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build universal CLI binary
+        run: |
+          swift build -c release --arch arm64 --arch x86_64
+          mkdir -p dist
+          cp .build/apple/Products/Release/handoff dist/
+          cd dist && tar -czvf handoff-${GITHUB_REF_NAME}-universal.tar.gz handoff
+          shasum -a 256 handoff-${GITHUB_REF_NAME}-universal.tar.gz > handoff-${GITHUB_REF_NAME}-universal.tar.gz.sha256
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cli
+          path: dist/*
+
+  build-app:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build macOS app
+        run: |
+          xcodebuild -project SharedClipboard.xcodeproj \
+            -scheme SharedClipboard \
+            -configuration Release \
+            -archivePath SharedClipboard.xcarchive \
+            archive
+
+          xcodebuild -exportArchive \
+            -archivePath SharedClipboard.xcarchive \
+            -exportPath export \
+            -exportOptionsPlist ExportOptions.plist
+
+      - name: Create DMG
+        run: |
+          mkdir -p dmg-contents dist
+          cp -R export/SharedClipboard.app dmg-contents/
+          hdiutil create -volname "SharedClipboard" -srcfolder dmg-contents -ov -format UDZO dist/SharedClipboard-${GITHUB_REF_NAME}.dmg
+          shasum -a 256 dist/SharedClipboard-${GITHUB_REF_NAME}.dmg > dist/SharedClipboard-${GITHUB_REF_NAME}.dmg.sha256
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: app
+          path: dist/*
+
+  release:
+    needs: [build-cli, build-app]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            cli/*
+            app/*
+          generate_release_notes: true
+
+  update-homebrew:
+    needs: release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Update formula and cask with new SHA256
+        run: |
+          VERSION=${GITHUB_REF_NAME#v}
+
+          # Download SHA files
+          CLI_SHA=$(curl -sL https://github.com/Michaelliv/shared-clipboard/releases/download/${GITHUB_REF_NAME}/handoff-${GITHUB_REF_NAME}-universal.tar.gz.sha256 | cut -d' ' -f1)
+          APP_SHA=$(curl -sL https://github.com/Michaelliv/shared-clipboard/releases/download/${GITHUB_REF_NAME}/SharedClipboard-${GITHUB_REF_NAME}.dmg.sha256 | cut -d' ' -f1)
+
+          # Update Formula
+          sed -i "s/sha256 \".*\"/sha256 \"${CLI_SHA}\"/" Formula/handoff.rb
+
+          # Update Cask
+          sed -i "s/version \".*\"/version \"${VERSION}\"/" Casks/handoff.rb
+          sed -i "s/sha256 \".*\"/sha256 \"${APP_SHA}\"/" Casks/handoff.rb
+
+      - name: Commit and push
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add Formula/ Casks/
+          git commit -m "Update Homebrew to ${GITHUB_REF_NAME}" || exit 0
+          git push

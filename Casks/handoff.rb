@@ -1,14 +1,18 @@
-# Placeholder for Homebrew cask
-# See issue #5 for implementation details
-
 cask "handoff" do
-  version "0.1.0"
-  # sha256 to be added when releasing
+  version "1.0.0"
+  sha256 "PLACEHOLDER_SHA256"
 
-  # url to be added when releasing
-  name "SharedClipboard"
-  desc "macOS menu bar app for shared clipboard management"
-  homepage "https://github.com/michaelliv/handoff"
+  url "https://github.com/Michaelliv/shared-clipboard/releases/download/v#{version}/SharedClipboard-#{version}.dmg"
+  name "Shared Clipboard"
+  desc "Menu bar clipboard manager for humans and AI agents"
+  homepage "https://github.com/Michaelliv/shared-clipboard"
+
+  depends_on macos: ">= :ventura"
 
   app "SharedClipboard.app"
+
+  zap trash: [
+    "~/.handoff",
+    "~/Library/Preferences/com.michaelliv.SharedClipboard.plist",
+  ]
 end

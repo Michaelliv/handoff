@@ -10,24 +10,28 @@ A macOS clipboard manager designed for sharing content between humans and AI age
 
 ## Installation
 
-### Homebrew
+### Homebrew (recommended)
 
 ```bash
-# Install CLI tool
-brew install michaelliv/tap/handoff
-
-# Install menu bar app
-brew install --cask michaelliv/tap/handoff
+brew tap michaelliv/shared-clipboard
+brew install handoff                   # CLI only
+brew install --cask handoff            # macOS menu bar app
 ```
+
+### Manual
+
+Download from [Releases](https://github.com/Michaelliv/shared-clipboard/releases).
 
 ### Build from Source
 
 ```bash
-git clone https://github.com/michaelliv/handoff.git
-cd handoff
+git clone https://github.com/Michaelliv/shared-clipboard.git
+cd shared-clipboard
 swift build -c release
 cp .build/release/handoff /usr/local/bin/
 ```
+
+> **Note:** The unsigned app requires right-click → Open on first launch to bypass Gatekeeper.
 
 ## Menu Bar App
 
