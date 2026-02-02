@@ -88,8 +88,8 @@ jobs:
 
           # Download SHA files using gh CLI
           gh release download ${GITHUB_REF_NAME} --pattern "*.sha256" --dir /tmp/sha
-          CLI_SHA=$(grep "handoff-" /tmp/sha/*.sha256 | cut -d' ' -f1)
-          APP_SHA=$(grep "Handoff-" /tmp/sha/*.sha256 | cut -d' ' -f1)
+          CLI_SHA=$(cat /tmp/sha/handoff-*.sha256 | awk '{print $1}')
+          APP_SHA=$(cat /tmp/sha/Handoff-*.sha256 | awk '{print $1}')
 
           # Update Formula
           sed -i "s|url \".*\"|url \"https://github.com/Michaelliv/handoff/releases/download/${GITHUB_REF_NAME}/handoff-${GITHUB_REF_NAME}-universal.tar.gz\"|" Formula/handoff.rb
