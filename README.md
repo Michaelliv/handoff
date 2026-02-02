@@ -2,6 +2,10 @@
 
 A macOS clipboard manager designed for sharing content between humans and AI agents.
 
+## For AI Agents
+
+Run `handoff onboard` to add usage instructions to your context file (e.g., `~/.claude/CLAUDE.md`).
+
 ## Usage
 
 ```bash
