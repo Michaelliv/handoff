@@ -83,8 +83,8 @@ jobs:
           VERSION=${GITHUB_REF_NAME#v}
 
           # Download SHA files
-          CLI_SHA=$(curl -sL https://github.com/Michaelliv/shared-clipboard/releases/download/${GITHUB_REF_NAME}/handoff-${GITHUB_REF_NAME}-universal.tar.gz.sha256 | cut -d' ' -f1)
-          APP_SHA=$(curl -sL https://github.com/Michaelliv/shared-clipboard/releases/download/${GITHUB_REF_NAME}/SharedClipboard-${GITHUB_REF_NAME}.dmg.sha256 | cut -d' ' -f1)
+          CLI_SHA=$(curl -sL https://github.com/Michaelliv/handoff/releases/download/${GITHUB_REF_NAME}/handoff-${GITHUB_REF_NAME}-universal.tar.gz.sha256 | cut -d' ' -f1)
+          APP_SHA=$(curl -sL https://github.com/Michaelliv/handoff/releases/download/${GITHUB_REF_NAME}/SharedClipboard-${GITHUB_REF_NAME}.dmg.sha256 | cut -d' ' -f1)
 
           # Update Formula
           sed -i "s/sha256 \".*\"/sha256 \"${CLI_SHA}\"/" Formula/handoff.rb

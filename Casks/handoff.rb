@@ -2,10 +2,10 @@ cask "handoff" do
   version "1.0.0"
   sha256 "PLACEHOLDER_SHA256"
 
-  url "https://github.com/Michaelliv/shared-clipboard/releases/download/v#{version}/SharedClipboard-#{version}.dmg"
+  url "https://github.com/Michaelliv/handoff/releases/download/v#{version}/SharedClipboard-#{version}.dmg"
   name "Shared Clipboard"
   desc "Menu bar clipboard manager for humans and AI agents"
-  homepage "https://github.com/Michaelliv/shared-clipboard"
+  homepage "https://github.com/Michaelliv/handoff"
 
   depends_on macos: ">= :ventura"
 
