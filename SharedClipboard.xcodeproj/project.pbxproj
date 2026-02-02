@@ -11,6 +11,7 @@
 		A1000003229F0003 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000004229F0004; };
 		A1000005229F0005 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1000006229F0006; };
 		A1000007229F0007 /* ClipboardCore in Frameworks */ = {isa = PBXBuildFile; productRef = A1000008229F0008; };
+		A100001C229F001C /* ClipboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100001D229F001D; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +21,7 @@
 		A100000A229F000A /* SharedClipboard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SharedClipboard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A100000B229F000B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A100000C229F000C /* SharedClipboard.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SharedClipboard.entitlements; sourceTree = "<group>"; };
+		A100001D229F001D /* ClipboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,6 +49,7 @@
 			children = (
 				A1000002229F0002 /* SharedClipboardApp.swift */,
 				A1000004229F0004 /* ContentView.swift */,
+				A100001D229F001D /* ClipboardViewModel.swift */,
 				A1000006229F0006 /* Assets.xcassets */,
 				A100000B229F000B /* Info.plist */,
 				A100000C229F000C /* SharedClipboard.entitlements */,
@@ -139,6 +142,7 @@
 			files = (
 				A1000001229F0001 /* SharedClipboardApp.swift in Sources */,
 				A1000003229F0003 /* ContentView.swift in Sources */,
+				A100001C229F001C /* ClipboardViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

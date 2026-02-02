@@ -1,27 +1,13 @@
 import SwiftUI
 import ClipboardCore
 
+// ContentView is no longer used - menu content is defined in SharedClipboardApp
+// Kept for potential future use or SwiftUI previews
+
 struct ContentView: View {
     var body: some View {
-        VStack(spacing: 12) {
-            Text("SharedClipboard")
-                .font(.headline)
-
-            Divider()
-
-            Text("Clipboard content will appear here")
-                .foregroundStyle(.secondary)
-                .font(.caption)
-
-            Divider()
-
-            Button("Quit") {
-                NSApplication.shared.terminate(nil)
-            }
-            .keyboardShortcut("q")
-        }
-        .padding()
-        .frame(width: 250)
+        Text("SharedClipboard")
+            .padding()
     }
 }
 

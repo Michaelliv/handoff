@@ -18,16 +18,32 @@ struct Handoff: ParsableCommand {
             Clear.self,
             Get.self,
             Onboard.self,
+            Version.self,
         ],
         defaultSubcommand: Get.self
     )
+}
+
+// MARK: - Version Command
+
+struct Version: ParsableCommand {
+    static let configuration = CommandConfiguration(
+        commandName: "version",
+        abstract: "Show version",
+        aliases: ["v"]
+    )
+
+    func run() {
+        print("1.0.0")
+    }
 }
 
 // MARK: - Push Command
 
 struct Push: ParsableCommand {
     static let configuration = CommandConfiguration(
-        abstract: "Add content to stack (or pipe to stdin)"
+        abstract: "Add content to stack (or pipe to stdin)",
+        aliases: ["p"]
     )
 
     @Flag(name: .long, help: "Read content from stdin")
@@ -81,7 +97,8 @@ struct Push: ParsableCommand {
 
 struct Pop: ParsableCommand {
     static let configuration = CommandConfiguration(
-        abstract: "Get and remove newest item"
+        abstract: "Get and remove newest item",
+        aliases: ["o"]
     )
 
     func run() throws {
@@ -101,7 +118,8 @@ struct Pop: ParsableCommand {
 
 struct List: ParsableCommand {
     static let configuration = CommandConfiguration(
-        abstract: "Show all stack items"
+        abstract: "Show all stack items",
+        aliases: ["l", "ls"]
     )
 
     func run() {
@@ -127,7 +145,8 @@ struct List: ParsableCommand {
 
 struct Save: ParsableCommand {
     static let configuration = CommandConfiguration(
-        abstract: "Save #1 to named slot"
+        abstract: "Save #1 to named slot",
+        aliases: ["s"]
     )
 
     @Argument(help: "Name for the slot (alphanumeric, dash, underscore)")
@@ -158,7 +177,8 @@ struct Save: ParsableCommand {
 
 struct Delete: ParsableCommand {
     static let configuration = CommandConfiguration(
-        abstract: "Delete named slot"
+        abstract: "Delete named slot",
+        aliases: ["d", "rm"]
     )
 
     @Argument(help: "Name of the slot to delete")
@@ -181,7 +201,8 @@ struct Delete: ParsableCommand {
 
 struct Slots: ParsableCommand {
     static let configuration = CommandConfiguration(
-        abstract: "List named slots"
+        abstract: "List named slots",
+        aliases: ["sl"]
     )
 
     func run() {
@@ -207,7 +228,8 @@ struct Slots: ParsableCommand {
 
 struct Clear: ParsableCommand {
     static let configuration = CommandConfiguration(
-        abstract: "Clear the stack"
+        abstract: "Clear the stack",
+        aliases: ["c"]
     )
 
     func run() throws {
@@ -258,10 +280,14 @@ struct Get: ParsableCommand {
 
 struct Onboard: ParsableCommand {
     static let configuration = CommandConfiguration(
-        abstract: "Add handoff instructions to CLAUDE.md"
+        abstract: "Add handoff instructions to ~/.<dir>/CLAUDE.md or AGENTS.md"
     )
 
-    private static let marker = "<handoff>"
+    @Flag(name: .long, help: "Replace existing handoff instructions")
+    var force = false
+
+    private static let markerStart = "<handoff>"
+    private static let markerEnd = "</handoff>"
 
     private static let instructions = """
 <handoff>
@@ -283,41 +309,78 @@ Run `handoff --help` for more.
 
     func run() {
         let fileManager = FileManager.default
-        let cwd = fileManager.currentDirectoryPath
-        let claudeMd = (cwd as NSString).appendingPathComponent("CLAUDE.md")
-        let agentsMd = (cwd as NSString).appendingPathComponent("AGENTS.md")
+        let homeDir = fileManager.homeDirectoryForCurrentUser.path
 
+        // Search for existing ~/.<dir>/AGENT*.md or ~/.<dir>/CLAUDE*.md
         var targetFile: String? = nil
-        var existingContent = ""
 
-        if fileManager.fileExists(atPath: claudeMd) {
-            targetFile = claudeMd
-            existingContent = (try? String(contentsOfFile: claudeMd, encoding: .utf8)) ?? ""
-        } else if fileManager.fileExists(atPath: agentsMd) {
-            targetFile = agentsMd
-            existingContent = (try? String(contentsOfFile: agentsMd, encoding: .utf8)) ?? ""
+        if let contents = try? fileManager.contentsOfDirectory(atPath: homeDir) {
+            for item in contents where item.hasPrefix(".") {
+                let dotDir = (homeDir as NSString).appendingPathComponent(item)
+                var isDir: ObjCBool = false
+                guard fileManager.fileExists(atPath: dotDir, isDirectory: &isDir), isDir.boolValue else {
+                    continue
+                }
+
+                if let files = try? fileManager.contentsOfDirectory(atPath: dotDir) {
+                    for file in files {
+                        if (file.hasPrefix("AGENT") || file.hasPrefix("CLAUDE")) && file.hasSuffix(".md") {
+                            targetFile = (dotDir as NSString).appendingPathComponent(file)
+                            break
+                        }
+                    }
+                }
+                if targetFile != nil { break }
+            }
         }
 
-        // Already onboarded
-        if existingContent.contains(Self.marker) {
-            print("✓ Already onboarded")
-            if let file = targetFile {
-                print("  \(file)")
+        // Default to ~/.claude/CLAUDE.md if none found
+        if targetFile == nil {
+            let claudeDir = (homeDir as NSString).appendingPathComponent(".claude")
+            if !fileManager.fileExists(atPath: claudeDir) {
+                do {
+                    try fileManager.createDirectory(atPath: claudeDir, withIntermediateDirectories: true)
+                } catch {
+                    FileHandle.standardError.write("Error: Failed to create ~/.claude directory\n".data(using: .utf8)!)
+                    return
+                }
             }
+            targetFile = (claudeDir as NSString).appendingPathComponent("CLAUDE.md")
+        }
+
+        var existingContent = (try? String(contentsOfFile: targetFile!, encoding: .utf8)) ?? ""
+
+        // Check if already onboarded
+        let hasExisting = existingContent.contains(Self.markerStart)
+
+        if hasExisting && !force {
+            print("✓ Already onboarded")
+            print("  \(targetFile!)")
+            print("  Use --force to update instructions")
             return
         }
 
+        // Remove old instructions if forcing update
+        if hasExisting && force {
+            if let startRange = existingContent.range(of: Self.markerStart),
+               let endRange = existingContent.range(of: Self.markerEnd) {
+                let fullRange = startRange.lowerBound..<endRange.upperBound
+                existingContent.removeSubrange(fullRange)
+                existingContent = existingContent.trimmingCharacters(in: .whitespacesAndNewlines)
+            }
+        }
+
         let newContent: String
-        if targetFile != nil {
-            newContent = existingContent.trimmingCharacters(in: .whitespacesAndNewlines) + "\n\n" + Self.instructions + "\n"
-        } else {
-            targetFile = claudeMd
+        if existingContent.isEmpty {
             newContent = Self.instructions + "\n"
+        } else {
+            newContent = existingContent + "\n\n" + Self.instructions + "\n"
         }
 
         do {
             try newContent.write(toFile: targetFile!, atomically: true, encoding: .utf8)
-            print("✓ Added handoff instructions to \(targetFile!)")
+            let action = (hasExisting && force) ? "Updated" : "Added"
+            print("✓ \(action) handoff instructions in \(targetFile!)")
         } catch {
             FileHandle.standardError.write("Error: Failed to write to \(targetFile!)\n".data(using: .utf8)!)
         }
