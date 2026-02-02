@@ -3,7 +3,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "shared-clipboard",
+    name: "handoff",
     platforms: [
         .macOS(.v13)
     ],

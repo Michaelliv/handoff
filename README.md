@@ -1,4 +1,4 @@
-# shared-clipboard
+# handoff
 
 A macOS clipboard manager designed for sharing content between humans and AI agents.
 
@@ -6,7 +6,7 @@ A macOS clipboard manager designed for sharing content between humans and AI age
 
 - **ClipboardCore**: Shared Swift library for storage and logic
 - **clip**: CLI tool for pushing/getting clipboard content
-- **SharedClipboard**: macOS menu bar app for visual access
+- **Handoff**: macOS menu bar app for visual access
 
 ## Installation
 
@@ -17,14 +17,14 @@ A macOS clipboard manager designed for sharing content between humans and AI age
 brew install michaelliv/tap/clip
 
 # Install menu bar app
-brew install --cask michaelliv/tap/shared-clipboard
+brew install --cask michaelliv/tap/handoff
 ```
 
 ### Build from Source
 
 ```bash
-git clone https://github.com/michaelliv/shared-clipboard.git
-cd shared-clipboard
+git clone https://github.com/michaelliv/handoff.git
+cd handoff
 swift build -c release
 ```
 

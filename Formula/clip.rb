@@ -3,7 +3,7 @@
 
 class Clip < Formula
   desc "CLI tool for managing shared clipboard content"
-  homepage "https://github.com/michaelliv/shared-clipboard"
+  homepage "https://github.com/michaelliv/handoff"
   # url and sha256 to be added when releasing
   license "MIT"
 
