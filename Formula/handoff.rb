@@ -2,7 +2,7 @@ class Handoff < Formula
   desc "Shared clipboard CLI for humans and AI agents"
   homepage "https://github.com/Michaelliv/handoff"
   url "https://github.com/Michaelliv/handoff/releases/download/v#{version}/handoff-#{version}-universal.tar.gz"
-  sha256 "PLACEHOLDER_SHA256"
+  sha256 "Not"
   license "MIT"
 
   depends_on :macos
