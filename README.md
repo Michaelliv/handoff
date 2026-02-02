@@ -2,6 +2,35 @@
 
 A macOS clipboard manager designed for sharing content between humans and AI agents.
 
+## Usage
+
+```bash
+# Push content
+handoff push "Hello, world!"         # or: handoff p
+echo "piped" | handoff push
+
+# Get by position (1 = newest)
+handoff 1
+
+# Pop (get and remove)
+handoff pop                          # or: handoff o
+
+# List stack
+handoff list                         # or: handoff l
+
+# Named slots
+handoff save myslot                  # save #1 to slot
+handoff myslot                       # get slot
+handoff delete myslot                # delete slot
+handoff slots                        # list all slots
+
+# Other
+handoff clear                        # clear stack
+handoff version                      # show version
+handoff onboard                      # add AI agent instructions
+handoff help
+```
+
 ## Installation
 
 ### Homebrew (recommended)
@@ -33,35 +62,6 @@ cp .build/release/handoff /usr/local/bin/
 - **Click to copy**: Click any item to copy back to clipboard
 - **Launch at Login**: Optional toggle
 - **Live sync**: Auto-refreshes when CLI modifies storage
-
-## CLI Usage
-
-```bash
-# Push content
-handoff push "Hello, world!"         # or: handoff p
-echo "piped" | handoff push
-
-# Get by position (1 = newest)
-handoff 1
-
-# Pop (get and remove)
-handoff pop                          # or: handoff o
-
-# List stack
-handoff list                         # or: handoff l
-
-# Named slots
-handoff save myslot                  # save #1 to slot
-handoff myslot                       # get slot
-handoff delete myslot                # delete slot
-handoff slots                        # list all slots
-
-# Other
-handoff clear                        # clear stack
-handoff version                      # show version
-handoff onboard                      # add AI agent instructions
-handoff help
-```
 
 ## Storage
 
