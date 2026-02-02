@@ -31,23 +31,23 @@ jobs:
 
       - name: Build macOS app
         run: |
-          xcodebuild -project SharedClipboard.xcodeproj \
+          xcodebuild -project Handoff.xcodeproj \
             -scheme SharedClipboard \
             -configuration Release \
-            -archivePath SharedClipboard.xcarchive \
+            -archivePath Handoff.xcarchive \
             archive
 
           xcodebuild -exportArchive \
-            -archivePath SharedClipboard.xcarchive \
+            -archivePath Handoff.xcarchive \
             -exportPath export \
             -exportOptionsPlist ExportOptions.plist
 
       - name: Create DMG
         run: |
           mkdir -p dmg-contents dist
-          cp -R export/SharedClipboard.app dmg-contents/
-          hdiutil create -volname "SharedClipboard" -srcfolder dmg-contents -ov -format UDZO dist/SharedClipboard-${GITHUB_REF_NAME}.dmg
-          shasum -a 256 dist/SharedClipboard-${GITHUB_REF_NAME}.dmg > dist/SharedClipboard-${GITHUB_REF_NAME}.dmg.sha256
+          cp -R export/Handoff.app dmg-contents/
+          hdiutil create -volname "Handoff" -srcfolder dmg-contents -ov -format UDZO dist/Handoff-${GITHUB_REF_NAME}.dmg
+          shasum -a 256 dist/Handoff-${GITHUB_REF_NAME}.dmg > dist/Handoff-${GITHUB_REF_NAME}.dmg.sha256
 
       - uses: actions/upload-artifact@v4
         with:
@@ -89,7 +89,7 @@ jobs:
           # Download SHA files using gh CLI
           gh release download ${GITHUB_REF_NAME} --pattern "*.sha256" --dir /tmp/sha
           CLI_SHA=$(grep "handoff-" /tmp/sha/*.sha256 | cut -d' ' -f1)
-          APP_SHA=$(grep "SharedClipboard-" /tmp/sha/*.sha256 | cut -d' ' -f1)
+          APP_SHA=$(grep "Handoff-" /tmp/sha/*.sha256 | cut -d' ' -f1)
 
           # Update Formula
           sed -i "s|url \".*\"|url \"https://github.com/Michaelliv/handoff/releases/download/${GITHUB_REF_NAME}/handoff-${GITHUB_REF_NAME}-universal.tar.gz\"|" Formula/handoff.rb
@@ -97,7 +97,7 @@ jobs:
           sed -i "s/version \".*\"/version \"${VERSION}\"/" Formula/handoff.rb
 
           # Update Cask
-          sed -i "s|url \".*\"|url \"https://github.com/Michaelliv/handoff/releases/download/${GITHUB_REF_NAME}/SharedClipboard-${GITHUB_REF_NAME}.dmg\"|" Casks/handoff.rb
+          sed -i "s|url \".*\"|url \"https://github.com/Michaelliv/handoff/releases/download/${GITHUB_REF_NAME}/Handoff-${GITHUB_REF_NAME}.dmg\"|" Casks/handoff.rb
           sed -i "s/version \".*\"/version \"${VERSION}\"/" Casks/handoff.rb
           sed -i "s/sha256 \".*\"/sha256 \"${APP_SHA}\"/" Casks/handoff.rb
 

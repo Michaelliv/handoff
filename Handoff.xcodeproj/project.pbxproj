@@ -289,7 +289,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.shared.clipboard;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Handoff;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 			};
@@ -317,7 +317,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.shared.clipboard;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Handoff;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 			};
