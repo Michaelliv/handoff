@@ -13,7 +13,7 @@ A macOS clipboard manager designed for sharing content between humans and AI age
 ### Homebrew (recommended)
 
 ```bash
-brew tap michaelliv/handoff
+brew tap michaelliv/handoff https://github.com/Michaelliv/handoff
 brew install handoff                   # CLI only
 brew install --cask handoff            # macOS menu bar app
 ```
