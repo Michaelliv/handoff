@@ -1,6 +1,6 @@
 cask "handoff" do
   version "1.1.0"
-  sha256 "ae88f8c63aeaa94c6f966090f30e4118c3ad95055e3fcf6dd9ab3284abfc6c32"
+  sha256 "236e43831656ed35301eb710022f377c6a33c3a73408bfad33aad913c4b828f8"
 
   url "https://github.com/Michaelliv/handoff/releases/download/v1.1.0/Handoff-v1.1.0.dmg"
   name "Handoff"
