@@ -92,9 +92,9 @@ jobs:
           APP_SHA=$(cat /tmp/sha/Handoff-*.sha256 | awk '{print $1}')
 
           # Update Formula
-          sed -i "s|url \".*\"|url \"https://github.com/Michaelliv/handoff/releases/download/${GITHUB_REF_NAME}/handoff-${GITHUB_REF_NAME}-universal.tar.gz\"|" Formula/handoff.rb
-          sed -i "s/sha256 \".*\"/sha256 \"${CLI_SHA}\"/" Formula/handoff.rb
-          sed -i "s/version \".*\"/version \"${VERSION}\"/" Formula/handoff.rb
+          sed -i "s|url \".*\"|url \"https://github.com/Michaelliv/handoff/releases/download/${GITHUB_REF_NAME}/handoff-${GITHUB_REF_NAME}-universal.tar.gz\"|" Formula/handoff-cli.rb
+          sed -i "s/sha256 \".*\"/sha256 \"${CLI_SHA}\"/" Formula/handoff-cli.rb
+          sed -i "s/version \".*\"/version \"${VERSION}\"/" Formula/handoff-cli.rb
 
           # Update Cask
           sed -i "s|url \".*\"|url \"https://github.com/Michaelliv/handoff/releases/download/${GITHUB_REF_NAME}/Handoff-${GITHUB_REF_NAME}.dmg\"|" Casks/handoff.rb

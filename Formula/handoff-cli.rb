@@ -1,4 +1,4 @@
-class Handoff < Formula
+class HandoffCli < Formula
   desc "Shared clipboard CLI for humans and AI agents"
   homepage "https://github.com/Michaelliv/handoff"
   url "https://github.com/Michaelliv/handoff/releases/download/v1.1.0/handoff-v1.1.0-universal.tar.gz"
